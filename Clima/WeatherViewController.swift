@@ -25,7 +25,11 @@ class WeatherViewController: UIViewController,CLLocationManagerDelegate,ChangeCi
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
-
+    
+    //min temp outlets
+    @IBOutlet weak var minTempLabel: UILabel!
+    //Max temp outlets
+    @IBOutlet weak var maxTempLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +61,7 @@ class WeatherViewController: UIViewController,CLLocationManagerDelegate,ChangeCi
                 self.updateWeatherData(json: weatherJSON)
             }
             else{
-                print("Error \(response.result.error)")
+                print("Error \(response.result.error!)")
                 self.cityLabel.text="Connection Issue"
             }
         }
@@ -75,11 +79,17 @@ class WeatherViewController: UIViewController,CLLocationManagerDelegate,ChangeCi
     
     //Write the updateWeatherData method here:
     func updateWeatherData(json:JSON){
-        if let tempResult=json["main"]["temp"].double{
+        if let tempResult=json["main"]["temp"].double , let minTempResult=json["main"]["temp_min"].double , let maxTempResult=json["main"]["temp_max"].double{
         weatherDataModel.temperature=Int(tempResult-273.15)
+        //Min temp json data
+        weatherDataModel.minTemp=Int(minTempResult-273.15)
+        weatherDataModel.maxTemp=Int(maxTempResult-273.15)
+        
         weatherDataModel.city=json["name"].stringValue
         weatherDataModel.condition=json["weather"][0]["id"].intValue
         weatherDataModel.weatherIconName=weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
+        
+        
         updateUIWithWeatherData()
         }
         else{
@@ -97,9 +107,10 @@ class WeatherViewController: UIViewController,CLLocationManagerDelegate,ChangeCi
     //Write the updateUIWithWeatherData method here:
     func updateUIWithWeatherData(){
         cityLabel.text=weatherDataModel.city
-        temperatureLabel.text="\(weatherDataModel.temperature)°"
+        temperatureLabel.text="\(weatherDataModel.temperature)°c"
         weatherIcon.image=UIImage(named: weatherDataModel.weatherIconName)
-        
+        minTempLabel.text="Min \(weatherDataModel.minTemp)°"
+        maxTempLabel.text="Max \(weatherDataModel.maxTemp)°"
         
     }
     
