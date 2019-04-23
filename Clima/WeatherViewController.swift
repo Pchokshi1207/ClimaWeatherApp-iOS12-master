@@ -109,8 +109,8 @@ class WeatherViewController: UIViewController,CLLocationManagerDelegate,ChangeCi
         cityLabel.text=weatherDataModel.city
         temperatureLabel.text="\(weatherDataModel.temperature)°c"
         weatherIcon.image=UIImage(named: weatherDataModel.weatherIconName)
-        minTempLabel.text="Min \(weatherDataModel.minTemp)°"
-        maxTempLabel.text="Max \(weatherDataModel.maxTemp)°"
+        minTempLabel.text="Min \(weatherDataModel.minTemp)°c"
+        maxTempLabel.text="Max \(weatherDataModel.maxTemp)°c"
         
     }
     
